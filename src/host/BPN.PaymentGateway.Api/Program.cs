@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.OpenApi.Models;
 using Polly;
 using Polly.Extensions.Http;
+using FluentValidation.AspNetCore;
 
 using BPN.PaymentGateway.Api.Extensions;
 using BPN.PaymentGateway.Api.Filters;
@@ -65,7 +66,12 @@ builder.Services.AddHttpClient<IBalanceManagementClient, BalanceManagementClient
 #endregion
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddFluentValidation(fv =>
+{
+    fv.RegisterValidatorsFromAssemblyContaining<Program>();
+});
+
+
 
 builder.Services.AddSwaggerGen(c =>
 {

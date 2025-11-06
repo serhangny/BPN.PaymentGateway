@@ -18,7 +18,7 @@ public class OrdersController : BaseApiController
     [HttpPost("create")]
     public async Task<IActionResult> Create([FromBody] CreateOrderCommand command)
     {
-        var result = await Mediator.Send(new CreateOrderCommand());
+        var result = await Mediator.Send(command);
         
         return result.IsSuccess ? Ok(result.Data) : BadRequest(result.Errors);
     }

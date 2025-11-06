@@ -58,7 +58,7 @@ public class BalanceManagementClient : IBalanceManagementClient
     /// </summary>
     public async Task<PreOrderResponse?> CreatePreorderAsync(CreateOrderCommand preOrder)
     {
-        using var response = await _httpClient.PostAsJsonAsync("api/preorder", preOrder);
+        using var response = await _httpClient.PostAsJsonAsync("api/balance/preorder", preOrder);
 
         var content = await response.Content.ReadAsStringAsync();
 

@@ -1,11 +1,12 @@
 using System.Reflection;
-
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 using BPN.PaymentGateway.Application.Providers;
+using BPN.PaymentGateway.Application.Validations;
+using BPN.PaymentGateway.Application.Orders.Commands;
 
 namespace BPN.PaymentGateway.Application.Extensions;
 
@@ -25,8 +26,8 @@ public static class ServiceCollectionExtensions
         return services
             .AddServices()
             .AddValidations()
-            .AddMediatr();
-        //.AddMemoryCache();
+            .AddMediatr()
+            .AddMemoryCache();
     }
     
     /// <summary>
@@ -48,6 +49,9 @@ public static class ServiceCollectionExtensions
     private static IServiceCollection AddValidations(this IServiceCollection services)
     {
         services.AddFluentValidationAutoValidation();
+        
+        services.AddScoped<IValidator<CreateOrderCommand>, CreateOrderValidator>();
+
         return services;
     }
     

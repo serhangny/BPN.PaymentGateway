@@ -7,9 +7,9 @@ namespace BPN.PaymentGateway.Application.Orders.Commands;
 /// <summary>
 /// Creates order
 /// </summary>
-public class CreateOrderCommand : IRequest<BaseResponse<int>>
+public class CreateOrderCommand : IRequest<BaseResponse<Unit>>
 {
-    public int OrderId { get; set; }
+    public string OrderId { get; set; } = string.Empty;
     
     public decimal Amount { get; set; }
 }
