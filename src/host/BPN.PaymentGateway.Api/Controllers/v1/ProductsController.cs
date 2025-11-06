@@ -16,7 +16,7 @@ namespace BPN.PaymentGateway.Api.Controllers.v1;
 public class ProductsController : BaseApiController
 {
     [HttpGet]
-    public async Task<IActionResult> GetUsers([FromQuery] GetProductQuery query)
+    public async Task<IActionResult> GetProducts([FromQuery] GetProductQuery query)
     {
         var result = await Mediator.Send(query);
         return result.IsSuccess ? Ok(result.Data) : BadRequest(result.Errors);
