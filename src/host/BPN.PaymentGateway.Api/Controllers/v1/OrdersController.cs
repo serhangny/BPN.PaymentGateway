@@ -24,15 +24,12 @@ public class OrdersController : BaseApiController
     }
     
     [HttpPost("{id}/complete")]
-    public async Task<IActionResult> CompleteOrder([FromRoute] Guid id)
+    public async Task<IActionResult> CompleteOrder([FromRoute] string id)
     {
-        // Example: send a command to your Application layer
-        // var result = await _mediator.Send(new CompleteOrderCommand(id));
-        //
-        // return result.IsSuccess
-        //     ? Ok(result.Data)
-        //     : BadRequest(result.Errors);
+        var orderId = id;
         
-        return Ok();
+        var result = await Mediator.Send(new CompleteOrderCommand { OrderId = orderId });
+        
+        return result.IsSuccess ? Ok(result.Data) : BadRequest(result.Errors);
     }
 }

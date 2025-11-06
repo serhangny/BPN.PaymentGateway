@@ -1,15 +1,13 @@
 using MediatR;
+
 using Microsoft.Extensions.Caching.Memory;
 
-using BPN.PaymentGateway.Application.Common.Models;
 using BPN.PaymentGateway.Application.Clients;
+using BPN.PaymentGateway.Application.Common.Models;
 
 namespace BPN.PaymentGateway.Application.Orders.Commands;
 
-/// <summary>
-/// Handles the create order command
-/// </summary>
-public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, BaseResponse<Unit>>
+public class CompleteOrderCommandHandler : IRequestHandler<CompleteOrderCommand, BaseResponse<Unit>>
 {
     private readonly IMemoryCache _memoryCache;
     private readonly IBalanceManagementClient _balanceManagementClient;
@@ -17,7 +15,9 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Bas
     /// <summary>
     /// CTOR
     /// </summary>
-    public CreateOrderCommandHandler(IBalanceManagementClient balanceManagementClient, IMemoryCache memoryCache)
+    /// <param name="memoryCache"></param>
+    /// <param name="balanceManagementClient"></param>
+    public CompleteOrderCommandHandler(IMemoryCache memoryCache, IBalanceManagementClient balanceManagementClient)
     {
         _memoryCache = memoryCache;
         _balanceManagementClient = balanceManagementClient;
@@ -26,9 +26,11 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Bas
     /// <summary>
     /// Handler
     /// </summary>
-    public async Task<BaseResponse<Unit>> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    public async Task<BaseResponse<Unit>> Handle(CompleteOrderCommand request, CancellationToken cancellationToken)
     {
-        var response =  await _balanceManagementClient.CreatePreorderAsync(request, cancellationToken);
+        var response =  await _balanceManagementClient.CompleteOrderAsync(request.OrderId, cancellationToken);
 
         if (response == null)
         {

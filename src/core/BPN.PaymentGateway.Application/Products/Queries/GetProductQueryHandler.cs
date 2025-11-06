@@ -22,7 +22,7 @@ public class GetProductQueryHandler : IRequestHandler<GetProductQuery, BaseRespo
     /// </summary>
     public async Task<BaseResponse<ProductListResponse>> Handle(GetProductQuery request, CancellationToken cancellationToken)
     {
-        var response =  await _balanceManagementClient.GetProductsAsync();
+        var response =  await _balanceManagementClient.GetProductsAsync(cancellationToken);
 
         if (response == null)
         {

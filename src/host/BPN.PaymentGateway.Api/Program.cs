@@ -58,7 +58,7 @@ builder.Services.AddHttpClient<IBalanceManagementClient, BalanceManagementClient
         client.DefaultRequestHeaders.Accept.Clear();
         client.DefaultRequestHeaders.Accept.Add(
             new MediaTypeWithQualityHeaderValue("application/json"));
-        client.Timeout = TimeSpan.FromSeconds(10);
+        client.Timeout = TimeSpan.FromSeconds(60);
     })
     .AddPolicyHandler(GetRetryPolicy())
     .AddPolicyHandler(GetCircuitBreakerPolicy());
@@ -70,8 +70,6 @@ builder.Services.AddControllers().AddFluentValidation(fv =>
 {
     fv.RegisterValidatorsFromAssemblyContaining<Program>();
 });
-
-
 
 builder.Services.AddSwaggerGen(c =>
 {

@@ -1,6 +1,5 @@
 using System.Net.Http.Json;
 using System.Text.Json;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 
 using BPN.PaymentGateway.Application.Orders.Commands;
@@ -14,11 +13,8 @@ namespace BPN.PaymentGateway.Application.Clients;
 /// </summary>
 public class BalanceManagementClient : IBalanceManagementClient
 {
-    private const string CacheKey = "balanceManagementClient";
-    
     private readonly HttpClient _httpClient;
     private readonly ILogger<BalanceManagementClient> _logger;
-    //private readonly IMemoryCache _memoryCache;
 
     /// <summary>
     /// CTOR
@@ -27,17 +23,16 @@ public class BalanceManagementClient : IBalanceManagementClient
     {
         _httpClient = httpClient;
         _logger = logger;
-        //_memoryCache = memoryCache;
     }
 
     /// <summary>
     /// Gets products from balance management
     /// </summary>
-    public async Task<ProductListResponse?> GetProductsAsync()
+    public async Task<ProductListResponse?> GetProductsAsync(CancellationToken cancellationToken = default)
     {
-        var response = await _httpClient.GetAsync("api/products");
+        var response = await _httpClient.GetAsync("api/products", cancellationToken);
        
-        var content = await response.Content.ReadAsStringAsync();
+        var content = await response.Content.ReadAsStringAsync(cancellationToken);
         _logger.LogDebug("Products API response: {Response}", content);
 
         if (!response.IsSuccessStatusCode)
@@ -56,11 +51,11 @@ public class BalanceManagementClient : IBalanceManagementClient
     /// <summary>
     /// Creates a pre order
     /// </summary>
-    public async Task<PreOrderResponse?> CreatePreorderAsync(CreateOrderCommand preOrder)
+    public async Task<PreOrderResponse?> CreatePreorderAsync(CreateOrderCommand preOrder, CancellationToken cancellationToken = default)
     {
-        using var response = await _httpClient.PostAsJsonAsync("api/balance/preorder", preOrder);
+        using var response = await _httpClient.PostAsJsonAsync("api/balance/preorder", preOrder, cancellationToken);
 
-        var content = await response.Content.ReadAsStringAsync();
+        var content = await response.Content.ReadAsStringAsync(cancellationToken);
 
         _logger.LogDebug("Preorder API raw response: {Content}", content);
 
@@ -89,6 +84,46 @@ public class BalanceManagementClient : IBalanceManagementClient
         catch (JsonException ex)
         {
             _logger.LogError(ex, "Failed to deserialize preorder response: {Body}", content);
+            throw new InvalidOperationException("Invalid JSON response from Balance Management service");
+        }
+    }
+
+    /// <summary>
+    /// Completes response
+    /// </summary>
+    public async Task<CompleteOrderResponse?> CompleteOrderAsync(string orderId, CancellationToken cancellationToken = default)
+    {
+        using var response = await _httpClient.PostAsJsonAsync("api/balance/complete", orderId, cancellationToken);
+
+        var content = await response.Content.ReadAsStringAsync(cancellationToken);
+
+        _logger.LogDebug("Complete order API raw response: {Content}", content);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            _logger.LogWarning("Preorder failed: {Status} {Body}", response.StatusCode, content);
+            throw new HttpRequestException($"Balance Management returned {response.StatusCode}");
+        }
+
+        if (string.IsNullOrWhiteSpace(content))
+        {
+            _logger.LogWarning("Preorder response body was empty");
+            return null;
+        }
+
+        try
+        {
+            var result = JsonSerializer.Deserialize<CompleteOrderResponse>(content,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+            if (result is null)
+                throw new InvalidOperationException("Complete order deserialization returned null");
+
+            return result;
+        }
+        catch (JsonException ex)
+        {
+            _logger.LogError(ex, "Failed to deserialize complete order response: {Body}", content);
             throw new InvalidOperationException("Invalid JSON response from Balance Management service");
         }
     }

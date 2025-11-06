@@ -9,7 +9,7 @@ namespace BPN.PaymentGateway.Application.Clients;
 /// </summary>
 public interface IBalanceManagementClient
 {
-    Task<ProductListResponse?> GetProductsAsync();
-    Task<PreOrderResponse?> CreatePreorderAsync(CreateOrderCommand createOrderCommand);
-    // Task<CompleteResponse> CompleteOrderAsync(Guid orderId);
+    Task<ProductListResponse?> GetProductsAsync(CancellationToken cancellationToken = default);
+    Task<PreOrderResponse?> CreatePreorderAsync(CreateOrderCommand createOrderCommand, CancellationToken cancellationToken = default);
+    Task<CompleteOrderResponse?> CompleteOrderAsync(string orderId, CancellationToken cancellationToken = default);
 }
