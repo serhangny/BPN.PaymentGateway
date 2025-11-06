@@ -17,6 +17,7 @@ public class GetProductQueryHandler : IRequestHandler<GetProductQuery, BaseRespo
     {
         _balanceManagementClient = balanceManagementClient;
     }
+    
     /// <summary>
     /// Handles the query
     /// </summary>

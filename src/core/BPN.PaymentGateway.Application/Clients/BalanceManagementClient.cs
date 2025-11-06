@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using BPN.PaymentGateway.Application.Orders.Commands;
 using BPN.PaymentGateway.Application.Orders.Models;
 using BPN.PaymentGateway.Application.Products.Models;
+using BPN.PaymentGateway.Application.Balances.Models;
 
 namespace BPN.PaymentGateway.Application.Clients;
 
@@ -45,6 +46,29 @@ public class BalanceManagementClient : IBalanceManagementClient
             return null;
 
         return JsonSerializer.Deserialize<ProductListResponse>(content,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+    }
+
+    /// <summary>
+    /// Gets user balance async
+    /// </summary>
+    public async Task<BalanceResponse?> GetBalanceAsync(CancellationToken cancellationToken = default)
+    {
+        var response = await _httpClient.GetAsync("api/balance", cancellationToken);
+       
+        var content = await response.Content.ReadAsStringAsync(cancellationToken);
+        _logger.LogDebug("Balance API response: {Response}", content);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new HttpRequestException(
+                $"Failed to fetch balance. Status: {response.StatusCode}, Body: {content}");
+        }
+
+        if (string.IsNullOrWhiteSpace(content))
+            return null;
+
+        return JsonSerializer.Deserialize<BalanceResponse>(content,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
     }
 
