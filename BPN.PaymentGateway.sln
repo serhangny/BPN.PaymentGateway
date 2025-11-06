@@ -1,0 +1,65 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deploy", "deploy", "{5C292A2E-D80C-4A31-B265-FB5F588FEA2E}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+		NuGet.Config = NuGet.Config
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{135A1ECE-506E-4ECF-94A9-9F5BFE99AB75}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{74630683-C9B6-4C31-8EB7-7F5D65E17705}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "core", "core", "{CDE0944C-F8EE-45E9-9B8B-5A38BE991AF9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "host", "host", "{431E1AEC-3525-4A20-A186-541E57BB04EF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "infrastructure", "infrastructure", "{8CB7743B-01A0-4200-AC81-BC55CA7079F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPN.PaymentGateway.Application", "src\core\BPN.PaymentGateway.Application\BPN.PaymentGateway.Application.csproj", "{E9481B2C-C483-4F95-B314-FCB59157A03A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPN.PaymentGateway.Domain", "src\core\BPN.PaymentGateway.Domain\BPN.PaymentGateway.Domain.csproj", "{7F783DAF-AAD3-4FA5-9DEF-C06671B9C378}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPN.PaymentGateway.Api", "src\host\BPN.PaymentGateway.Api\BPN.PaymentGateway.Api.csproj", "{FF91D2E1-741A-41E8-8A9D-B1AF1BF8FFED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPN.PaymentGateway.Infrastructure", "src\infrastructure\BPN.PaymentGateway.Infrastructure\BPN.PaymentGateway.Infrastructure.csproj", "{166BAE41-5584-4163-BD08-614273D5EB2B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E9481B2C-C483-4F95-B314-FCB59157A03A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9481B2C-C483-4F95-B314-FCB59157A03A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9481B2C-C483-4F95-B314-FCB59157A03A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9481B2C-C483-4F95-B314-FCB59157A03A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F783DAF-AAD3-4FA5-9DEF-C06671B9C378}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F783DAF-AAD3-4FA5-9DEF-C06671B9C378}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F783DAF-AAD3-4FA5-9DEF-C06671B9C378}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F783DAF-AAD3-4FA5-9DEF-C06671B9C378}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF91D2E1-741A-41E8-8A9D-B1AF1BF8FFED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF91D2E1-741A-41E8-8A9D-B1AF1BF8FFED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF91D2E1-741A-41E8-8A9D-B1AF1BF8FFED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF91D2E1-741A-41E8-8A9D-B1AF1BF8FFED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{166BAE41-5584-4163-BD08-614273D5EB2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{166BAE41-5584-4163-BD08-614273D5EB2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{166BAE41-5584-4163-BD08-614273D5EB2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{166BAE41-5584-4163-BD08-614273D5EB2B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CDE0944C-F8EE-45E9-9B8B-5A38BE991AF9} = {135A1ECE-506E-4ECF-94A9-9F5BFE99AB75}
+		{431E1AEC-3525-4A20-A186-541E57BB04EF} = {135A1ECE-506E-4ECF-94A9-9F5BFE99AB75}
+		{8CB7743B-01A0-4200-AC81-BC55CA7079F6} = {135A1ECE-506E-4ECF-94A9-9F5BFE99AB75}
+		{E9481B2C-C483-4F95-B314-FCB59157A03A} = {CDE0944C-F8EE-45E9-9B8B-5A38BE991AF9}
+		{7F783DAF-AAD3-4FA5-9DEF-C06671B9C378} = {CDE0944C-F8EE-45E9-9B8B-5A38BE991AF9}
+		{FF91D2E1-741A-41E8-8A9D-B1AF1BF8FFED} = {431E1AEC-3525-4A20-A186-541E57BB04EF}
+		{166BAE41-5584-4163-BD08-614273D5EB2B} = {8CB7743B-01A0-4200-AC81-BC55CA7079F6}
+	EndGlobalSection
+EndGlobal

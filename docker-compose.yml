@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+
+  bpn.paymentgateway.api:
+    build:
+      context: .
+      dockerfile: src/host/BPN.PaymentGateway.Api/Dockerfile
+    container_name: bpn.paymentgateway.api
+    ports:
+      - "8080:8080"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      #      - ConnectionStrings__DefaultConnection=
+      #      - RabbitMqSettings__Host=rabbitmq
+      #      - RabbitMqSettings__Username=guest
+      #      - RabbitMqSettings__Password=guest
+      - Logging__LogLevel__Default=Information
+      - Logging__LogLevel__Microsoft=Warning
+      - Logging__LogLevel__System=Error
+      - Logging__ConsoleEnabled=true
+      - Logging__FileEnabled=true
+      - Logging__HttpRequestResponseType=true
+      - Logging__SchedulerType=false
+      - Logging__EventbusType=true
+      - Logging__DatabaseType=false
+      - Logging__ProcessorType=true
