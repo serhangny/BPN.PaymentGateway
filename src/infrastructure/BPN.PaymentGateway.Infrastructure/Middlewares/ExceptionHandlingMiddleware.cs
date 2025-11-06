@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 using BPN.PaymentGateway.Application.Providers;
+using BPN.PaymentGateway.Domain.Exceptions;
 using BPN.PaymentGateway.Infrastructure.Extensions;
 
 namespace BPN.PaymentGateway.Infrastructure.Middlewares;
@@ -51,6 +52,13 @@ public class ExceptionHandlingMiddleware : IMiddleware
         try
         {
             await next(context);
+        }
+        catch (DomainException ex)
+        {
+            sw.Stop();
+
+            context.Response.StatusCode = ex.StatusCode;
+            await context.Response.WriteAsJsonAsync(new { error = ex.Message });
         }
         catch (Exception exception)
         {

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 using BPN.PaymentGateway.Application.Clients;
 using BPN.PaymentGateway.Application.Common.Models;
+using BPN.PaymentGateway.Domain.Exceptions;
 
 namespace BPN.PaymentGateway.Application.Orders.Commands;
 
@@ -30,6 +31,18 @@ public class CompleteOrderCommandHandler : IRequestHandler<CompleteOrderCommand,
     /// <param name="cancellationToken"></param>
     public async Task<BaseResponse<Unit>> Handle(CompleteOrderCommand request, CancellationToken cancellationToken)
     {
+        var userBalanceResponse = await _balanceManagementClient.GetBalanceAsync(cancellationToken);
+
+        if (userBalanceResponse is { Success: true })
+        {
+            var availableBalance = userBalanceResponse.Data.AvailableBalance;
+
+            if (availableBalance <= 0)
+            {
+                throw new InsufficientBalanceException(availableBalance);
+            }
+        }
+
         var response =  await _balanceManagementClient.CompleteOrderAsync(request.OrderId, cancellationToken);
 
         if (response == null)
