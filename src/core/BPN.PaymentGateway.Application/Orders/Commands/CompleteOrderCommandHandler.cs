@@ -31,6 +31,11 @@ public class CompleteOrderCommandHandler : IRequestHandler<CompleteOrderCommand,
     /// <param name="cancellationToken"></param>
     public async Task<BaseResponse<Unit>> Handle(CompleteOrderCommand request, CancellationToken cancellationToken)
     {
+        if (!_memoryCache.TryGetValue(request.OrderId, out _))
+        {
+            throw new OrderIdMisMatchException(request.OrderId);
+        }
+        
         var userBalanceResponse = await _balanceManagementClient.GetBalanceAsync(cancellationToken);
 
         if (userBalanceResponse is { Success: true })
@@ -49,8 +54,6 @@ public class CompleteOrderCommandHandler : IRequestHandler<CompleteOrderCommand,
         {
             return BaseResponse<Unit>.Failure();
         }
-        
-        _memoryCache.Set(request.OrderId, response);
         
         return BaseResponse<Unit>.Success(Unit.Value);
     }
