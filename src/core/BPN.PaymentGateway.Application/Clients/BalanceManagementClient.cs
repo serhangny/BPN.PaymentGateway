@@ -117,7 +117,9 @@ public class BalanceManagementClient : IBalanceManagementClient
     /// </summary>
     public async Task<CompleteOrderResponse?> CompleteOrderAsync(string orderId, CancellationToken cancellationToken = default)
     {
-        using var response = await _httpClient.PostAsJsonAsync("api/balance/complete", orderId, cancellationToken);
+        var request = new { orderId };
+
+        using var response = await _httpClient.PostAsJsonAsync("api/balance/complete", request, cancellationToken);
 
         var content = await response.Content.ReadAsStringAsync(cancellationToken);
 
@@ -125,13 +127,13 @@ public class BalanceManagementClient : IBalanceManagementClient
 
         if (!response.IsSuccessStatusCode)
         {
-            _logger.LogWarning("Preorder failed: {Status} {Body}", response.StatusCode, content);
+            _logger.LogWarning("Complete order failed: {Status} {Body}", response.StatusCode, content);
             throw new HttpRequestException($"Balance Management returned {response.StatusCode}");
         }
 
         if (string.IsNullOrWhiteSpace(content))
         {
-            _logger.LogWarning("Preorder response body was empty");
+            _logger.LogWarning("Complete order response body was empty");
             return null;
         }
 

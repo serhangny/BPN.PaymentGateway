@@ -9,15 +9,9 @@ services:
     container_name: bpn.paymentgateway.api
     ports:
       - "8080:8080"
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      #      - ConnectionStrings__DefaultConnection=
-      #      - RabbitMqSettings__Host=rabbitmq
-      #      - RabbitMqSettings__Username=guest
-      #      - RabbitMqSettings__Password=guest
+      - BalanceManagementApi__BaseUrl=https://balance-management-pi44.onrender.com
       - Logging__LogLevel__Default=Information
       - Logging__LogLevel__Microsoft=Warning
       - Logging__LogLevel__System=Error
